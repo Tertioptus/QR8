@@ -3,7 +3,7 @@
 args=("$@")
 
 NAME=$1 #Name should be the first parameter
-EXPIRE="1m" #default expire to one month
+dayCount=7 #default expire to one week
 
 #get non-tag parameters
 for argument in ${args[@]}
@@ -31,20 +31,30 @@ do
 		
 			esac
 			dayCount=$(($dayCount+${notice:0:1}*$days))
-			echo day count: $dayCount
 		done
-		echo ${#notices[@]}
-		expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
-		echo $expirationDate
-	fi
-
     #check if url
-	if [[ $argument =~ ^https?://  ]] 
+	elif [[ $argument =~ ^https?://  ]] 
 	then
-		echo ${args[i]}
-	fi
+		link=$argument
+	else
+		description=$argument
 
-     #else get name
+		#make following arguments tags
+	fi
 done
+
+expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
+
+note=${PWD##*/}
+# Check if in note directory
+if [[  $note =~ ^[0-9]{6}\. ]]
+then 
+	cd ..
+	newNote=${expirationDate}.${note%.}
+	mv $note $newNote
+	cd $newNote
+else
+	mkdir ${expirationDate}.${description}
+fi
 
 #get tags
