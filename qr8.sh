@@ -1,7 +1,11 @@
 #!/bin/bash
-
+#
+# qr8 [expiration]? [url]? [description] [tag]*
+#
+#########################################################################
 args=("$@")
-
+description=""
+tags=()
 NAME=$1 #Name should be the first parameter
 dayCount=7 #default expire to one week
 
@@ -36,10 +40,11 @@ do
 	elif [[ $argument =~ ^https?://  ]] 
 	then
 		link=$argument
-	else
+	elif [[ -e $description ]]
+	then
 		description=$argument
-
-		#make following arguments tags
+	elif
+		tag+=($argument)
 	fi
 done
 
@@ -57,4 +62,3 @@ else
 	mkdir ${expirationDate}.${description}
 fi
 
-#get tags
