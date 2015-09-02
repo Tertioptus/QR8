@@ -19,19 +19,16 @@ function writeTags() {
 
 function findRoot() {
 	local directory=$PWD
-	while true 
+	while [[ -d "$directory" ]] 
 	do
-		if [[ ! -d $directory ]]
-		then
-			break
-		elif [[ -e ${directory}.qr8 ]]		
-		then
+		if [[ -e "${directory}/.qr8" ]]
+		then 
 			echo $directory	
 			
 			break
-		else
-			directory=${directory#/*}	
 		fi
+			
+		directory=${directory#/*}	
 	done
 }
 
@@ -66,7 +63,7 @@ do
 	elif [[ $argument =~ ^https?://  ]] 
 	then
 		link=$argument
-	elif [[ -e $description ]]
+	elif [[ -z $description ]]
 	then
 		description=$argument
 	else
@@ -87,8 +84,8 @@ then
 	cd "$newNote"
 	writeTags
 else
-	root=${findRoot}
-	if [[ -z $root ]]
+	root=$(findRoot)
+	if [[ ! -z $root ]]
 	then
 		newNote=${root}/${expirationDate}.${description}
 		mkdir "$newNote"
