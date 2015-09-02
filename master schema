@@ -1,5 +1,13 @@
-docs
+.qr8
 tag tree
 profiles
  nav pages
  profile subscriptions
+[six digit date(yymmdd)].[description]
+	*tag.[description]
+	*link.[description] ~ url
+	
+
+
+key:
+~ file content
