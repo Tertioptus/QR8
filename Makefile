@@ -29,6 +29,6 @@ uninstall:
 	@echo ""
 	@echo 'Uninstalling qr8'
 	rm -rf $(INSTALL_DIR)
-	sed -i '/qr8/ d' ~/.bashrc
+	sed -i '/qr8/ Id' ~/.bashrc
 
 .PHONY: all install
