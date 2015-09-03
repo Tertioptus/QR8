@@ -33,7 +33,7 @@ function findRoot() {
 }
 
 #get non-tag parameters
-for argument in ${args[@]}
+for argument in "${args[@]}"
 do
     #check if expire time
 	if [[ $argument =~ ^([0-9][dwmy])+ ]] 
@@ -59,13 +59,17 @@ do
 			esac
 			dayCount=$(($dayCount+${notice:0:1}*$days))
 		done
-    #check if url
+	#If option i or init create .qr8 file
+	#elif [[$argument =~ ^-i ]]
+#then
+#		touch .qr8
 	elif [[ $argument =~ ^https?://  ]] 
+    #check if url
 	then
 		link=$argument
 	elif [[ -z $description ]]
 	then
-		description=$argument
+		description="$argument"
 	else
 		tags+=($argument)
 	fi
@@ -79,7 +83,7 @@ echo note: $note
 if [[  $note =~ ^[0-9]{6}\.|- ]]
 then 
 	cd ..
-	newNote=${expirationDate}.${note#*[-\.]}
+	newNote="${expirationDate}.${note#*[-\.]}"
 	mv "$note" "$newNote"
 	cd "$newNote"
 	writeTags
@@ -87,7 +91,7 @@ else
 	root=$(findRoot)
 	if [[ ! -z $root ]]
 	then
-		newNote=${root}/${expirationDate}.${description}
+		newNote="${root}/${expirationDate}.${description}"
 		mkdir "$newNote"
 		cd "$newNote"
 		writeTags
