@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# qr8 [expiration]? [url]? [description] [tag]*
+# qr8 [expiration]? [url]? [options]* [description] [tag]*
 #
 #########################################################################
 args=("$@")
