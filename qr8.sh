@@ -7,7 +7,7 @@ args=("$@")
 description=""
 tags=()
 NAME=$1 #Name should be the first parameter
-dayCount=7 #default expire to one week
+dayCount=1 #default expire to one week
 
 function writeTags() {
 
@@ -28,14 +28,18 @@ function findRoot() {
 			break
 		fi
 			
-		directory=${directory#/*}	
+		directory=${directory%/*}	
 	done
 }
 
+root=$(findRoot)
+
+function getTop() {
+	echo $(ls "$root" | head -1)
+}
 #get non-tag parameters
 for argument in "${args[@]}"
 do
-	echo argument:  $argument
     #check if expire time
 	if [[ $argument =~ ^([0-9][dwmy])+ ]] 
 	then
@@ -69,12 +73,19 @@ do
 	#If option p or pop move top directory to trash and go into it
 	elif [[ $argument =~ ^--p(op)? ]]
 	then
+		top=$(getTop)
+		poppedTop="$root/.trash/$top"
+		mv "$root/$top" "$poppedTop"
+		cd "$poppedTop"
 		return	
 	#If option t or top find top directory and go into it
 	elif [[ $argument =~ ^--t(op)? ]]
 	then
+		top=$(getTop)
+		cd "$root/$top"
 		return
-	elif [[ $argument =~ ^https?://  ]] 
+	elif [[ $argument =~ ^https?://  ]]
+
     #check if url
 	then
 		link=$argument
@@ -89,17 +100,15 @@ done
 expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
 
 note=${PWD##*/}
-echo note: $note
 # Check if in note directory
 if [[  $note =~ ^[0-9]{6}\.|- ]]
 then 
 	cd ..
 	newNote="${expirationDate}.${note#*[-\.]}"
-	mv "$note" "$newNote"
-	cd "$newNote"
+	mv "$note" "$root/$newNote"
+	cd "$root/$newNote"
 	writeTags
 else
-	root=$(findRoot)
 	if [[ ! -z $root ]]
 	then
 		newNote="${root}/${expirationDate}.${description}"
