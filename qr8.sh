@@ -35,6 +35,7 @@ function findRoot() {
 #get non-tag parameters
 for argument in "${args[@]}"
 do
+	echo argument:  $argument
     #check if expire time
 	if [[ $argument =~ ^([0-9][dwmy])+ ]] 
 	then
@@ -60,9 +61,19 @@ do
 			dayCount=$(($dayCount+${notice:0:1}*$days))
 		done
 	#If option i or init create .qr8 file
-	#elif [[$argument =~ ^-i ]]
-#then
-#		touch .qr8
+	elif [[ $argument =~ ^--i(nit)? ]]
+	then
+		touch .qr8
+		mkdir .trash
+		return
+	#If option p or pop move top directory to trash and go into it
+	elif [[ $argument =~ ^--p(op)? ]]
+	then
+		return	
+	#If option t or top find top directory and go into it
+	elif [[ $argument =~ ^--t(op)? ]]
+	then
+		return
 	elif [[ $argument =~ ^https?://  ]] 
     #check if url
 	then
