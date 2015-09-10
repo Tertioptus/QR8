@@ -21,6 +21,22 @@ install:
 	@echo 'USAGE:'
 	@echo '------'
 
+install-dev:
+	@echo ""
+	@echo "Installing dev QR8"
+
+	echo "# QR8             #" >> ~/.bashrc
+	
+	echo "alias qr8=\". $(PWD)/qr8.sh\"" >> ~/.bashrc
+
+	echo "# QR8 END #" >> ~/.bashrc
+	
+	exec bash
+	@echo ''
+	@echo 'USAGE:'
+	@echo '------'
+
+
 reinstall:
 	make uninstall --no-print-directory
 	make install --no-print-directory

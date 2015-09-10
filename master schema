@@ -4,9 +4,10 @@ profiles
  nav pages
  profile subscriptions
 [six digit date(yymmdd)].[description]
+	qnote
 	*tag.[description]
 	*link.[description] ~ url
-	
+		
 
 
 key:
