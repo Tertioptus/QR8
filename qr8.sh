@@ -50,7 +50,11 @@ function show() {
 	title=`basename $PWD`
 	echo $title:
 	ls | head -20
-	#TODO count list, if over head, leave elipsis
+	listCount=`ls -1 | wc -l`
+	if [[ listCount -gt 2 ]]
+	then
+		echo '...'
+	fi
 }
 
 #If no arguments "qr8" alone means go to root
