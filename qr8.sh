@@ -47,7 +47,7 @@ function getTop() {
 }
 
 function show() {
-	title=`basename $PWD`
+	title=`basename "$PWD"`
 	echo $title:
 	ls | head -20
 	listCount=`ls -1 | wc -l`
