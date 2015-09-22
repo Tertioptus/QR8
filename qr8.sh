@@ -8,6 +8,7 @@ description=""
 tags=()
 NAME=$1 #Name should be the first parameter
 dayCount=1 #default expire to one week
+expirationDate=
 
 function writeTags() {
 
