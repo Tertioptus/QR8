@@ -118,6 +118,8 @@ else
 			mv "$root/$top" "$poppedTop"
 			cd "$poppedTop"
 			show
+			newTop=$(getTop)
+			echo New top: $newTop
 			return	
 		#If option t or top find top directory and go into it
 		elif [[ $argument =~ ^--t(op)? ]]
