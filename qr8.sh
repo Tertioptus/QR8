@@ -49,7 +49,7 @@ function getTop() {
 
 function show() {
 	title=`basename "$PWD"`
-	echo $title:
+	echo -e "\e[32m$title:\e[0m"
 	ls | head -20
 	listCount=`ls -1 | wc -l`
 	if [[ listCount -gt 2 ]]
@@ -67,7 +67,7 @@ else
 	for argument in "${args[@]}"
 	do
 		#check if expire time
-		if [[ $argument =~ ^([0-9][dwmy])+ ]] 
+		if [[ $argument =~ ^([0-9]+[dwmy])+ ]] 
 		then
 			dayCount=0
 			notices=(`sed 's/[wdmy]/&\n/g' <<< "$argument"`)
@@ -117,9 +117,10 @@ else
 			poppedTop="$root/.trash/$top"
 			mv "$root/$top" "$poppedTop"
 			cd "$poppedTop"
+			echo -e "\e[31m(In trash!)\e[0m"
 			show
 			newTop=$(getTop)
-			echo New top: $newTop
+			echo -e "\e[34;47mNew top: $newTop\e[0m"
 			return	
 		#If option t or top find top directory and go into it
 		elif [[ $argument =~ ^--t(op)? ]]
