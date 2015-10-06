@@ -129,6 +129,24 @@ else
 			cd "$root/$top"
 			show
 			return
+		#If option p or pop move top directory to trash and go into it
+		elif [[ $argument =~ ^--c(op)? ]]
+		then
+			hash="#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
+			touch $hash
+			qr8 1d `basename $PWD` $hash
+			return	
+		elif [[ $argument =~ ^--h(op)? ]]
+		then
+			#get hash jump to hash
+			hash=(`printf '%s\n' \#*`)
+
+			#search for hash from root
+			HOP_DIR=(`find $ROOT -maxdepth 1 -name $hash`}
+
+			#go to first
+			cd $HOP_DIR
+			return	
 		elif [[ $argument =~ ^https?://  ]]
 
 		#check if url
