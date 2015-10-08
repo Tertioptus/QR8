@@ -132,20 +132,26 @@ else
 		#If option p or pop move top directory to trash and go into it
 		elif [[ $argument =~ ^--c(op)? ]]
 		then
-			hash="#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
+			hash="q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
 			touch $hash
-			qr8 1d `basename $PWD` $hash
+			expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
+			note_title=`basename $PWD`
+			copped_note=$root/$expirationDate.${note_title#*[-\.]}
+			mkdir $copped_note
+			cd $copped_note
+			touch $hash
+			touch qnote
 			return	
 		elif [[ $argument =~ ^--h(op)? ]]
 		then
 			#get hash jump to hash
-			hash=(`printf '%s\n' \#*`)
+			hash=(`printf '%s\n' q\#*`)
 
 			#search for hash from root
-			HOP_DIR=(`find $ROOT -maxdepth 1 -name $hash`}
+			HOP_DIR=(`find $ROOT -maxdepth 1 -name $hash`)
 
 			#go to first
-			cd $HOP_DIR
+			cd `dirname $HOP_DIR`
 			return	
 		elif [[ $argument =~ ^https?://  ]]
 
