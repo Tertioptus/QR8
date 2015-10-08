@@ -148,10 +148,18 @@ else
 			hash=(`printf '%s\n' q\#*`)
 
 			#search for hash from root
-			HOP_DIR=(`find $ROOT -maxdepth 1 -name $hash`)
+			HOP_DIRS+=(`find $root -name $hash`)
 
-			#go to first
-			cd `dirname $HOP_DIR`
+			for DIR in ${HOP_DIRS[@]}
+			do
+				if [[ ! `dirname $DIR` =~ $PWD   ]]
+				then
+					#go to first
+					cd "`dirname $DIR`"
+					break	
+				fi
+			done
+			
 			return	
 		elif [[ $argument =~ ^https?://  ]]
 
