@@ -3,7 +3,7 @@ tag tree
 profiles
  nav pages
  profile subscriptions
-[six digit date(yymmdd)].[description]
+[six digit date(yymmdd)].[hub]?.[description]
 	qnote
 	*tag.[description]
 	*link.[description] ~ url
@@ -14,3 +14,4 @@ profiles
 
 key:
 ~ file content
+hub type - domain point of origin (i.e. product, project, task etc)
