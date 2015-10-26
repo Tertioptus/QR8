@@ -9,6 +9,9 @@ tags=()
 NAME=$1 #Name should be the first parameter
 dayCount=1 #default expire to one week
 expirationDate=
+TRUE=0
+FALSE=1
+TODAY=`date '+%y%m%d'`
 
 function writeTags() {
 
@@ -41,6 +44,26 @@ function findQNoteRoot() {
 	findRoot "qnote"
 }
 
+function isPastDue() {
+	noteDate=${1:0:6}
+	if [[ $TODAY -gt $noteDate ]]
+	then
+		return $TRUE
+	else
+		return $FALSE
+	fi
+}
+
+function isDue() {
+	noteDate=${1:0:6}
+	if [[ $TODAY -eq $noteDate ]]
+	then
+		return $TRUE
+	else
+		return $FALSE
+	fi
+}
+
 root=$(findQr8Root)
 
 function getTop() {
@@ -50,7 +73,21 @@ function getTop() {
 function show() {
 	title=`basename "$PWD"`
 	echo -e "\e[32m$title:\e[0m"
-	ls | head -20
+	IFS=$'\t\n'
+	notes=(`ls | head -20`)
+	for note in ${notes[@]}
+	do
+		if isPastDue $note
+		then
+			echo -e "\e[97;41m$note\e[0m"
+		elif isDue $note
+		then
+			echo -e "\e[97;43m$note\e[0m"
+		else
+			echo $note
+		fi
+	done
+	unset $IFS #or IFS=$' \t\n'
 	listCount=`ls -1 | wc -l`
 	if [[ listCount -gt 2 ]]
 	then
