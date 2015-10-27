@@ -1,9 +1,10 @@
 .qr8
+.changelog
 tag tree
 profiles
  nav pages
  profile subscriptions
-[six digit date(yymmdd)].[description]
+[six digit date(yymmdd)].[type]?.[description]
 	qnote
 	*tag.[description]
 	*link.[description] ~ url
