@@ -102,9 +102,17 @@ function getTop() {
 	echo $(ls "$root" | head -1)
 }
 
+function showNoteSnippet() {
+	if [[ -e qnote ]] && [[ -s qnote ]]
+	then
+		echo "\"`head -3 qnote`$(if [ $(cat qnote | wc -l) -gt 3 ]; then echo "..."; fi)\"" 
+	fi
+}
+
 function show() {
 	title=`basename "$PWD"`
 	echo -e "\e[32m$title:\e[0m"
+	showNoteSnippet
 	IFS=$'\t\n'
 	notes=(`ls | head -20`)
 	for note in ${notes[@]}
