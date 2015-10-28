@@ -44,7 +44,21 @@ function findQNoteRoot() {
 	findRoot "qnote"
 }
 
+function isNote() {
+
+	if [[ $note =~ ^[0-9]{6} ]]
+	then
+		return $TRUE
+	else
+		return $FALSE
+	fi
+}
+
 function isPastDue() {
+	if ! isNote $1; then
+		return $FALSE
+	fi
+
 	noteDate=${1:0:6}
 	if [[ $TODAY -gt $noteDate ]]
 	then
@@ -55,6 +69,10 @@ function isPastDue() {
 }
 
 function isDue() {
+	if ! isNote $1; then
+		return $FALSE
+	fi
+
 	noteDate=${1:0:6}
 	if [[ $TODAY -eq $noteDate ]]
 	then
@@ -64,28 +82,42 @@ function isDue() {
 	fi
 }
 
+function showNote() {
+	note=$1	
+
+	if isPastDue $note		
+	then
+		echo -e "\e[97;41m$note\e[0m"
+	elif isDue $note
+	then
+		echo -e "\e[90;43m$note\e[0m"
+	else
+		echo $note
+	fi
+}
+
 root=$(findQr8Root)
 
 function getTop() {
 	echo $(ls "$root" | head -1)
 }
 
+function showNoteSnippet() {
+	if [[ -e qnote ]] && [[ -s qnote ]]
+	then
+		echo "\"`head -3 qnote`$(if [ $(cat qnote | wc -l) -gt 3 ]; then echo "..."; fi)\"" 
+	fi
+}
+
 function show() {
 	title=`basename "$PWD"`
 	echo -e "\e[32m$title:\e[0m"
+	showNoteSnippet
 	IFS=$'\t\n'
 	notes=(`ls | head -20`)
 	for note in ${notes[@]}
 	do
-		if isPastDue $note
-		then
-			echo -e "\e[97;41m$note\e[0m"
-		elif isDue $note
-		then
-			echo -e "\e[97;43m$note\e[0m"
-		else
-			echo $note
-		fi
+		showNote $note
 	done
 	unset $IFS #or IFS=$' \t\n'
 	listCount=`ls -1 | wc -l`
@@ -157,7 +189,7 @@ else
 			echo -e "\e[31m(In trash!)\e[0m"
 			show
 			newTop=$(getTop)
-			echo -e "\e[34;47mNew top: $newTop\e[0m"
+			echo New Top: $(showNote $newTop)
 			return	
 		#If option t or top find top directory and go into it
 		elif [[ $argument =~ ^--t(op)? ]]
