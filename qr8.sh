@@ -121,7 +121,7 @@ function show() {
 	done
 	unset $IFS #or IFS=$' \t\n'
 	listCount=`ls -1 | wc -l`
-	if [[ listCount -gt 2 ]]
+	if [[ listCount -gt 20 ]]
 	then
 		echo '...'
 	fi
@@ -185,11 +185,12 @@ else
 			top=$(getTop)
 			poppedTop="$root/.trash/$top"
 			mv "$root/$top" "$poppedTop"
-			cd "$poppedTop"
-			echo -e "\e[31m(In trash!)\e[0m"
+			cd "$root"
 			show
-			newTop=$(getTop)
-			echo New Top: $(showNote $newTop)
+			cd "$poppedTop"
+			echo
+			echo -e "\e[97;41mIN TRASH!!!\e[0m\e[31mIN TRASH!!!\e[0m\e[97;41mIN TRASH!!!\e[0m"
+			show
 			return	
 		#If option t or top find top directory and go into it
 		elif [[ $argument =~ ^--t(op)? ]]
