@@ -111,7 +111,7 @@ function showNoteSnippet() {
 
 function show() {
 	title=`basename "$PWD"`
-	echo -e "\e[32m$title:\e[0m"
+	echo -e "\e[32m$(showNote $title):\e[0m"
 	showNoteSnippet
 	IFS=$'\t\n'
 	notes=(`ls | head -20`)
@@ -189,9 +189,9 @@ else
 			show
 			cd "$poppedTop"
 			echo
-			echo -e "\e[97;41m---IN TRASH!!!\e[0m\e[31mIN TRASH!!!\e[0m\e[97;41mIN TRASH!!!---\e[0m"
+			echo -e "\e[47;31mIN TRASH!!!IN TRASH!!!IN TRASH!!!\e[0m"
 			show
-			echo -e "\e[97;41m^^^IN TRASH!!!\e[0m\e[31mIN TRASH!!!\e[0m\e[97;41mIN TRASH!!!^^^\e[0m"
+			echo -e "\e[47;31mIN TRASH!!!IN TRASH!!!IN TRASH!!!\e[0m"
 			return	
 		#If option t or top find top directory and go into it
 		elif [[ $argument =~ ^--t(op)? ]]
