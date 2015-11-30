@@ -179,6 +179,12 @@ else
 			mv "$current" "$root/.trash/"
 			show
 			return	
+		#If option s or stop go to note root of the system
+		elif [[ $argument =~ ^--s(top)? ]]
+		then
+			current="$(findQNoteRoot)"
+			cd "$current"
+			return	
 		#If option p or pop move top directory to trash and go into it
 		elif [[ $argument =~ ^--p(op)? ]]
 		then
