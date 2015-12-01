@@ -226,11 +226,11 @@ else
 			hash=(`printf '%s\n' q\#*`)
 
 			#search for hash from root
-			HOP_DIRS+=(`find $root -name $hash`)
+			HOP_DIRS=(`find $root -name $hash`)
 
 			for DIR in ${HOP_DIRS[@]}
 			do
-				if [[ ! `dirname $DIR` =~ $PWD   ]]
+				if [[ ! `dirname $DIR` =~ ${PWD#./}   ]]
 				then
 					#go to first
 					cd "`dirname $DIR`"
