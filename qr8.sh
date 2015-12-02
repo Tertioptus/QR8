@@ -239,6 +239,24 @@ else
 			done
 			
 			return	
+		elif [[ $argument =~ ^--track ]]
+		then
+			current=$PWD
+			
+			while [ -z $(`printf '%s\n' q\#*`) ]
+			do
+				qr8 --hop
+				echo $PWD
+
+				if [ -z $(`printf '%s\n' qnote*`) ]
+				then
+					break
+				else
+					#if not qnote, repeat
+					qr8 --stop
+				fi
+			done
+			cd $current
 		elif [[ $argument =~ ^https?://  ]]
 
 		#check if url
