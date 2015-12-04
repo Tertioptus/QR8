@@ -210,16 +210,21 @@ else
 		#If option p or pop move top directory to trash and go into it
 		elif [[ $argument =~ ^--c(op)? ]]
 		then
-			hash="q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
-			expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
-			note_title=`basename $PWD`
-			copped_note=$root/$expirationDate.${note_title#*[-\.]}
-			mkdir $copped_note
-			mv * $copped_note
-			touch $hash
-			cd $copped_note
-			touch qnote
-			touch $hash
+			if `[ -a q#* ]` 
+			then
+				echo "Hash for this channel already exists."
+			else
+				hash="q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
+				expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
+				note_title=`basename $PWD`
+				copped_note=$root/$expirationDate.${note_title#*[-\.]}
+				mkdir $copped_note
+				touch $hash
+				mv * $copped_note
+				touch $hash
+				cd $copped_note
+				touch qnote
+			fi
 			return	
 		elif [[ $argument =~ ^--h(op)? ]]
 		then
