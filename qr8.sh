@@ -201,7 +201,7 @@ else
 			cd "$poppedTop"
 			return	
 		#If option t or top find top directory and go into it
-		elif [[ $argument =~ ^--t(op)? ]]
+		elif [[ $argument =~ ^--t(op)?$ ]]
 		then
 			top=$(getTop)
 			cd "$root/$top"
@@ -210,45 +210,58 @@ else
 		#If option p or pop move top directory to trash and go into it
 		elif [[ $argument =~ ^--c(op)? ]]
 		then
-			hash="q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
-			touch $hash
-			expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
-			note_title=`basename $PWD`
-			copped_note=$root/$expirationDate.${note_title#*[-\.]}
-			mkdir $copped_note
-			cd $copped_note
-			touch $hash
-			touch qnote
+			if `[ -a q#* ]` 
+			then
+				echo "Hash for this channel already exists."
+			else
+				hash="q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
+				expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
+				note_title=`basename $PWD`
+				copped_note=$root/$expirationDate.${note_title#*[-\.]}
+				mkdir $copped_note
+				touch $hash
+				mv * $copped_note
+				touch $hash
+				cd $copped_note
+				touch qnote
+			fi
 			return	
 		elif [[ $argument =~ ^--h(op)? ]]
 		then
-			#get hash jump to hash
-			hash=(`printf '%s\n' q\#*`)
+			if `[ -a q#* ]` 
+			then
+				#get hash jump to hash
+				hash=(`printf '%s\n' q\#*`)
 
-			#search for hash from root
-			HOP_DIRS=(`find $root -name $hash`)
+				#search for hash from root
+				HOP_DIRS=(`find $root -name $hash`)
 
-			for DIR in ${HOP_DIRS[@]}
-			do
-				if [[ ! `dirname $DIR` =~ ${PWD#./}   ]]
-				then
-					#go to first
-					cd "`dirname $DIR`"
-					break	
-				fi
-			done
-			
+				for DIR in ${HOP_DIRS[@]}
+				do
+					if [[ ! `dirname $DIR` =~ ${PWD#./}   ]]
+					then
+						#go to first
+						cd "`dirname $DIR`"
+						break	
+					fi
+				done
+			else
+				echo "No hash channel provided."
+			fi
 			return	
-		elif [[ $argument =~ ^--track ]]
+		elif [[ $argument =~ ^--trace ]]
 		then
-			current=$PWD
+			traceOrigin=$PWD 
 			
-			while [ -z $(`printf '%s\n' q\#*`) ]
+			while true 
 			do
-				qr8 --hop
-				echo $PWD
-
-				if [ -z $(`printf '%s\n' qnote*`) ]
+				if `[ -a q#* ]` 
+				then
+					qr8 --hop
+					echo "* ${PWD#$root}"
+				fi
+				
+				if `[ -a qnote* ]`
 				then
 					break
 				else
@@ -256,7 +269,8 @@ else
 					qr8 --stop
 				fi
 			done
-			cd $current
+			cd "$traceOrigin"
+			return
 		elif [[ $argument =~ ^https?://  ]]
 
 		#check if url
