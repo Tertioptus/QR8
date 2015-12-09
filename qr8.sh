@@ -127,6 +127,11 @@ function show() {
 	fi
 }
 
+function getHash() {
+	
+	echo "q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
+}
+
 #If no arguments "qr8" alone means go to root
 if [[ -z ${args[@]} ]]
 then 
@@ -214,7 +219,7 @@ else
 			then
 				echo "Hash for this channel already exists."
 			else
-				hash="q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
+				hash=$(getHash)
 				expirationDate=`date '+%y%m%d' -d "+$dayCount days"`
 				note_title=`basename $PWD`
 				copped_note=$root/$expirationDate.${note_title#*[-\.]}
@@ -306,6 +311,7 @@ else
 			mkdir "$newNote"
 			cd "$newNote"
 			touch qnote
+			touch ".$(getHash)"
 			writeTags
 		else
 			echo No QR8 root found.
