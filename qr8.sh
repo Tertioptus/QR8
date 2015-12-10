@@ -139,7 +139,6 @@ function getHash() {
 	
 	echo "q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
 }
-
 #If no arguments "qr8" alone means go to root
 if [[ -z ${args[@]} ]]
 then 
@@ -328,7 +327,7 @@ else
 fi
 
 #If note started in trash, display a visible banner when it is pushed out for verification
-if [[ $STARTED_IN_TRASH ]]
+if $STARTED_IN_TRASH 
 then
 	echo -e "\e[42;37mOUT OF TRASH!!!\e[0m\e[47;32mOUT OF TRASH!!!\e[0m\e[42;37mOUT OF TRASH!\e[0m"
 fi
