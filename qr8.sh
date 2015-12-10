@@ -12,6 +12,12 @@ expirationDate=
 TRUE=0
 FALSE=1
 TODAY=`date '+%y%m%d'`
+STARTED_IN_TRASH=false
+
+if [[ $PWD =~ ".trash"  ]] 
+then
+	STARTED_IN_TRASH=true
+fi
 
 function writeTags() {
 
@@ -128,6 +134,8 @@ function show() {
 }
 
 function getHash() {
+
+	#TODO check for q# in directory first
 	
 	echo "q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
 }
@@ -319,4 +327,9 @@ else
 	fi
 fi
 
+#If note started in trash, display a visible banner when it is pushed out for verification
+if [[ $STARTED_IN_TRASH ]]
+then
+	echo -e "\e[42;37mOUT OF TRASH!!!\e[0m\e[47;32mOUT OF TRASH!!!\e[0m\e[42;37mOUT OF TRASH!\e[0m"
+fi
 show
