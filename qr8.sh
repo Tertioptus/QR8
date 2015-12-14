@@ -311,6 +311,12 @@ else
 		cd "$root/$newNote"
 		touch qnote
 		writeTags
+		
+        #If note started in trash, display a visible banner when it is pushed out for verification
+		if $STARTED_IN_TRASH 
+		then
+			echo -e "\e[42;37mOUT OF TRASH!!!\e[0m\e[47;32mOUT OF TRASH!!!\e[0m\e[42;37mOUT OF TRASH!\e[0m"
+		fi
 	else
 		if [[ ! -z $root ]]
 		then
@@ -326,9 +332,4 @@ else
 	fi
 fi
 
-#If note started in trash, display a visible banner when it is pushed out for verification
-if $STARTED_IN_TRASH 
-then
-	echo -e "\e[42;37mOUT OF TRASH!!!\e[0m\e[47;32mOUT OF TRASH!!!\e[0m\e[42;37mOUT OF TRASH!\e[0m"
-fi
 show
