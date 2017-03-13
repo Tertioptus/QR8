@@ -137,7 +137,7 @@ function getHash() {
 
 	#TODO check for q# in directory first
 	
-	echo "q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g'`"
+	echo "q#`echo -n $PWD | openssl dgst -md5 -binary | openssl enc -base64 | sed 's#/##g' | tr -dc A-Za-z0-9`"
 }
 #If no arguments "qr8" alone means go to root
 if [[ -z ${args[@]} ]]
