@@ -21,10 +21,12 @@ fi
 
 function writeTags() {
 
+	tagListFile='tag'
 	for tag in ${tags[@]}
 	do	
-		touch "tag.$tag"
+		tagListFile+='.'$tag
 	done
+	touch $tagListFile
 }
 
 function findRoot() {
